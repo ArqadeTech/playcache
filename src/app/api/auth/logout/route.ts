@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { clearSessionCookie, siteUrl } from "@/lib/session";
+import { clearSessionCookie, redirectTo } from "@/lib/session";
 
 export async function POST() {
   await clearSessionCookie();
   return NextResponse.json({ ok: true });
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   await clearSessionCookie();
-  return NextResponse.redirect(`${siteUrl()}/`);
+  return redirectTo(request, "/");
 }

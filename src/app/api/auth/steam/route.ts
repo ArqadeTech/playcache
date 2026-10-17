@@ -1,5 +1,4 @@
-import { NextResponse } from "next/server";
-import { setSessionCookie, siteUrl } from "@/lib/session";
+import { redirectTo, setSessionCookie } from "@/lib/session";
 import { steamConfigured, steamLoginUrl } from "@/lib/steam";
 
 export async function GET(request: Request) {
@@ -16,8 +15,8 @@ export async function GET(request: Request) {
       },
       true,
     );
-    return NextResponse.redirect(`${siteUrl()}/library`);
+    return redirectTo(request, "/library");
   }
 
-  return NextResponse.redirect(steamLoginUrl());
+  return Response.redirect(steamLoginUrl(), 307);
 }

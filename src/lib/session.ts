@@ -92,3 +92,19 @@ export function siteUrl(): string {
   }
   return "http://localhost:3000";
 }
+
+/** Prefer the incoming request origin so local http://127.0.0.1 vs localhost stay consistent. */
+export function requestOrigin(request: Request): string {
+  const proto = request.headers.get("x-forwarded-proto");
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
+  if (host) {
+    const scheme = proto || (host.includes("localhost") || host.startsWith("127.") ? "http" : "https");
+    return `${scheme}://${host}`;
+  }
+  return siteUrl();
+}
+
+export function redirectTo(request: Request, path: string): Response {
+  const target = new URL(path, `${requestOrigin(request)}/`);
+  return Response.redirect(target, 307);
+}
