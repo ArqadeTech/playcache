@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { searchCurseMods } from "@/lib/curseforge";
+import { searchCurseMods, curseConfigured } from "@/lib/curseforge";
+import { searchModrinthMods, modrinthConfigured } from "@/lib/modrinth";
 import type { ModLoader } from "@/lib/minecraft";
 import { MC_VERSIONS } from "@/lib/minecraft";
 
@@ -27,11 +28,26 @@ export async function GET(request: Request) {
   }
 
   try {
+    // Prefer Modrinth when a token is configured (mrp_… keys).
+    if (modrinthConfigured()) {
+      const result = await searchModrinthMods({ version, loader, query });
+      return NextResponse.json({
+        ...result,
+        note: null,
+        demo: false,
+      });
+    }
+
+    if (curseConfigured()) {
+      const result = await searchCurseMods({ version, loader, query });
+      return NextResponse.json(result);
+    }
+
     const result = await searchCurseMods({ version, loader, query });
     return NextResponse.json(result);
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "CurseForge error" },
+      { error: err instanceof Error ? err.message : "Mod search error" },
       { status: 502 },
     );
   }

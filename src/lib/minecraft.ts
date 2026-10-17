@@ -46,7 +46,10 @@ export type PackMod = {
   logoUrl: string | null;
   downloadCount: number;
   fileSizeMb: number;
+  /** Project page URL (Modrinth or CurseForge). */
   curseUrl: string;
+  source?: "modrinth" | "curseforge" | "demo";
+  projectId?: string;
 };
 
 export type ModpackConfig = {

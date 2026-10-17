@@ -64,10 +64,24 @@ SESSION_SECRET=long-random-string
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL (Steam OpenID return_to) |
 | `STEAM_API_KEY` | Live Steam library; omit for demo library |
-| `CURSEFORGE_API_KEY` | Live CurseForge search; omit for demo mods |
+| `MODRINTH_TOKEN` | Live Modrinth mod search + jar resolve (`mrp_…`) |
+| `CURSEFORGE_API_KEY` | Optional CurseForge catalog fallback |
 | `SESSION_SECRET` | Signs session cookies |
 
-CurseForge keys: [console.curseforge.com](https://console.curseforge.com/)
+Modrinth tokens: [modrinth.com/settings/account](https://modrinth.com/settings/account)
+
+### Real remote Minecraft
+
+```bash
+# Terminal A — host PC (needs ffmpeg + xdotool + X11, and ideally Prism/Minecraft)
+npm run host
+
+# Terminal B — web app
+npm run dev
+```
+
+Enable **Remote host** → endpoint `http://<pc-ip>:8787` → pick Modrinth mods → **Connect & play**.
+The agent downloads jars into `~/.minecraft/mods`, launches your Minecraft client (or a live session window), and streams the display into the browser.
 
 ## Deploy to Vercel
 

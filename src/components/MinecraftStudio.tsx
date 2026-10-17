@@ -250,7 +250,7 @@ export function MinecraftStudio() {
 
           <label className="block min-w-[14rem] flex-1">
             <span className="font-mono text-[11px] uppercase tracking-wide text-fog">
-              Search CurseForge
+              Search mods (Modrinth)
             </span>
             <input
               value={query}
@@ -329,7 +329,7 @@ export function MinecraftStudio() {
                     rel="noreferrer"
                     className="btn-ghost !px-3 !py-2 text-center text-xs"
                   >
-                    CurseForge
+                    Page
                   </a>
                 </div>
               </li>
@@ -347,7 +347,7 @@ export function MinecraftStudio() {
         </h2>
         <p className="mt-2 text-sm text-fog leading-relaxed">
           {LOADER_LABELS[activeLoader]} · Minecraft {version}. Mods resolve from
-          CurseForge; the playable session slice caches in this browser.
+          Modrinth; jars install on your remote host when you play.
           {remoteHost.enabled
             ? ` Remote host: ${remoteHost.name} (${remoteHost.os}).`
             : ""}

@@ -1,36 +1,48 @@
-# Playcache host agent (Minecraft remote mode)
+# Playcache host agent (real remote Minecraft)
 
-Run this on the **Linux or Windows PC** that owns Minecraft Java + your mods.
-The browser client connects to the agent, receives a stream, and sends input
-(keyboard / mobile on-screen controls).
+Run this on the **Linux or Windows PC** that has Minecraft (Prism / official launcher).
+The browser streams that display and sends keyboard / mobile-control input.
 
-## Contract
-
-| Endpoint | Purpose |
-| --- | --- |
-| `GET /health` | JSON `{ "ok": true, "os": "linux"\|"windows", "minecraft": true }` |
-| `WS /` or your configured path | Session: video/input (or WebRTC signaling) |
-
-Optional header: `Authorization: Bearer <token>` matching the token in the web UI.
-
-## Quick demo agent
+## Start
 
 ```bash
 # from playcache/
-node host-agent/demo-agent.mjs
+npm run host
+# or: node host-agent/host-agent.mjs
 ```
 
-Then in Playcache → Minecraft → enable **Remote host**:
+Optional env:
 
-- Endpoint: `http://127.0.0.1:8787`
-- OS: match your machine
-- Play → Enter world
+```bash
+PLAYCACHE_HOST_PORT=8787
+PLAYCACHE_DISPLAY=:0          # your desktop display
+PLAYCACHE_MC_DIR=~/.minecraft
+PLAYCACHE_MODS_DIR=~/.minecraft/mods
+MODRINTH_TOKEN=mrp_…          # so the agent can download jars if needed
+PLAYCACHE_HOST_TOKEN=secret   # optional auth
+```
 
-The demo agent answers `/health` and accepts WebSockets. Swap in ffmpeg / OBS /
-WebRTC encode + uinput / SendInput for a production host.
+## Endpoints
 
-## Notes
+| Path | Role |
+| --- | --- |
+| `GET /health` | Liveness + launcher detection |
+| `GET /mjpeg` | Live screen stream (ffmpeg x11grab) |
+| `WS /control` | Keyboard / mouse from the browser |
+| `POST /mods/sync` | Download Modrinth jars into `mods/` |
+| `POST /launch` | Sync mods + start Prism/official Minecraft (or fallback session window) |
 
-- You must own Minecraft; the agent launches **your** installed client.
-- Mods stay on the host disk; the browser only caches the pack manifest / session slice.
-- Mobile controls emit `KeyboardEvent`s in the page; forward those over the WS to the host.
+## Browser setup
+
+1. Minecraft studio → enable **Remote host**
+2. Endpoint `http://<pc-ip>:8787`
+3. Build a pack from Modrinth → **Cache pack & play** → **Connect & play**
+
+The web app resolves jar URLs via Modrinth, tells the agent to install them, launches Minecraft on the host, and shows the live MJPEG stream.
+
+## Requirements (Linux)
+
+- `ffmpeg`, `xdotool`, X11 display (or Xvfb)
+- Java + Prism Launcher or official Minecraft for the real client
+
+Windows: run under WSL2 with an X server, or adapt capture to DXGI (future).

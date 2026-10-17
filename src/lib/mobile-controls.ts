@@ -195,7 +195,7 @@ export function codeToDisplay(code: string): string {
   return code;
 }
 
-/** Dispatch a synthetic keyboard event into the page for the session / host agent bridge. */
+/** Dispatch a synthetic keyboard event + host-input bus for the remote agent. */
 export function emitSessionKey(
   code: string,
   type: "keydown" | "keyup",
@@ -214,6 +214,12 @@ export function emitSessionKey(
       key,
       bubbles: true,
       cancelable: true,
+    }),
+  );
+  // Dynamic import avoided — publish via custom event for host-client subscribers.
+  window.dispatchEvent(
+    new CustomEvent("playcache-host-input", {
+      detail: { type, code, key },
     }),
   );
 }

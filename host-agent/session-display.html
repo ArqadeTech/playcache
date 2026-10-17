@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/><title>Playcache Session</title>
+<style>
+  html,body{margin:0;height:100%;background:#0b1a14;color:#e8fff2;font-family:system-ui,sans-serif}
+  .wrap{display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;gap:12px;
+    background:radial-gradient(800px 400px at 70% 10%,rgba(124,255,178,.2),transparent),#07110f}
+  h1{font-size:42px;margin:0}
+  .grid{display:grid;grid-template-columns:repeat(8,48px);gap:4px;margin-top:18px}
+  .b{width:48px;height:48px;background:#2f9e68;box-shadow:inset 0 -6px 0 #1a4a2e}
+  .b:nth-child(3n){background:#7cffb2}
+  p{opacity:.8;max-width:520px;text-align:center;line-height:1.45}
+  kbd{background:#12241f;border:1px solid rgba(124,255,178,.3);padding:2px 6px;border-radius:4px}
+</style></head>
+<body>
+<div class="wrap">
+  <h1>Playcache · live host</h1>
+  <p>This display is what the browser is streaming. Input from the web client (and mobile controls) is injected here via xdotool.</p>
+  <p>Version 1.20.1 · forge · mods: Entity Culling</p>
+  <p>Install <b>Prism Launcher</b> or official Minecraft on this machine, then hit Launch again for the real client. Mods folder: <code>/tmp/playcache-mods</code></p>
+  <p>Try keys: <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> <kbd>Space</kbd></p>
+  <div class="grid"><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div></div>
+</div>
+<script>
+document.addEventListener('keydown',e=>{
+  const el=document.createElement('div');
+  el.textContent='key '+e.code;
+  el.style.cssText='position:fixed;bottom:12px;left:12px;background:#12241f;padding:6px 10px;border:1px solid #7cffb2';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),600);
+});
+</script>
+</body></html>
