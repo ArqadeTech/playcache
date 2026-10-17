@@ -16,6 +16,16 @@ import {
   type ModLoader,
   type PackMod,
 } from "@/lib/minecraft";
+import {
+  readMobilePref,
+  writeMobilePref,
+  type MobilePref,
+} from "@/lib/mobile-controls";
+import {
+  readRemoteHost,
+  type RemoteHostConfig,
+} from "@/lib/remote-host";
+import { RemoteHostPanel } from "@/components/RemoteHostPanel";
 
 type SearchResponse = {
   mods?: PackMod[];
@@ -71,6 +81,12 @@ export function MinecraftStudio() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [pending, startTransition] = useTransition();
+  const [remoteHost, setRemoteHost] = useState<RemoteHostConfig>(() =>
+    readRemoteHost(),
+  );
+  const [mobilePref, setMobilePref] = useState<MobilePref>(() =>
+    readMobilePref(),
+  );
 
   const versionMeta = MC_VERSIONS.find((v) => v.id === version)!;
   const loaders = versionMeta.loaders;
@@ -114,6 +130,10 @@ export function MinecraftStudio() {
     );
   }, [version, activeLoader, pack]);
 
+  useEffect(() => {
+    writeMobilePref(mobilePref);
+  }, [mobilePref]);
+
   const packIds = useMemo(() => new Set(pack.map((m) => m.id)), [pack]);
   const cacheMb = estimatePackCacheMb({
     version,
@@ -147,7 +167,51 @@ export function MinecraftStudio() {
   const playHref = `/minecraft/play?version=${encodeURIComponent(version)}&loader=${activeLoader}`;
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+    <div className="mx-auto space-y-8">
+      <RemoteHostPanel value={remoteHost} onChange={setRemoteHost} />
+
+      <section className="rounded-sm border border-line bg-panel/50 p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2
+              className="text-xl font-bold tracking-tight"
+              style={{ fontFamily: "var(--font-display), sans-serif" }}
+            >
+              Mobile controls
+            </h2>
+            <p className="mt-1 max-w-xl text-sm text-fog leading-relaxed">
+              Minecraft-only on-screen HUD and remappable controller. Auto-shows
+              on phones; force it on desktop to customize the layout.
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-4">
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              className="accent-[var(--signal)]"
+              checked={mobilePref.forceMobile}
+              onChange={(e) =>
+                setMobilePref((p) => ({ ...p, forceMobile: e.target.checked }))
+              }
+            />
+            Force on-screen controller
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              className="accent-[var(--signal)]"
+              checked={mobilePref.showHud}
+              onChange={(e) =>
+                setMobilePref((p) => ({ ...p, showHud: e.target.checked }))
+              }
+            />
+            Show Minecraft HUD overlay
+          </label>
+        </div>
+      </section>
+
+      <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
       <section>
         <div className="flex flex-wrap items-end gap-4">
           <label className="block min-w-[8rem]">
@@ -284,6 +348,9 @@ export function MinecraftStudio() {
         <p className="mt-2 text-sm text-fog leading-relaxed">
           {LOADER_LABELS[activeLoader]} · Minecraft {version}. Mods resolve from
           CurseForge; the playable session slice caches in this browser.
+          {remoteHost.enabled
+            ? ` Remote host: ${remoteHost.name} (${remoteHost.os}).`
+            : ""}
         </p>
 
         <dl className="mt-4 grid grid-cols-2 gap-2 font-mono text-xs">
@@ -294,6 +361,18 @@ export function MinecraftStudio() {
           <div className="rounded-sm border border-line bg-ink/40 p-3">
             <dt className="text-fog">Cache slice</dt>
             <dd className="mt-1 text-paper">~{cacheMb} MB</dd>
+          </div>
+          <div className="rounded-sm border border-line bg-ink/40 p-3">
+            <dt className="text-fog">Play via</dt>
+            <dd className="mt-1 text-paper">
+              {remoteHost.enabled ? `Remote · ${remoteHost.os}` : "Cloud node"}
+            </dd>
+          </div>
+          <div className="rounded-sm border border-line bg-ink/40 p-3">
+            <dt className="text-fog">Mobile UI</dt>
+            <dd className="mt-1 text-paper">
+              {mobilePref.forceMobile ? "Forced on" : "Auto"}
+            </dd>
           </div>
         </dl>
 
@@ -341,6 +420,7 @@ export function MinecraftStudio() {
           </button>
         </div>
       </aside>
+      </div>
     </div>
   );
 }

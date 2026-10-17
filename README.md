@@ -8,8 +8,9 @@ Playcache is a Vercel-deployable Next.js app that:
 1. Signs players in with **Steam OpenID** (for the Steam library)
 2. Loads **owned Steam games** via the Steam Web API
 3. Lets you build a **Minecraft modpack** (version + Forge/Fabric/NeoForge/Quilt + CurseForge mods)
-4. Writes a **playable session / pack slice** into the browser (Cache Storage + IndexedDB)
-5. Starts a **stream / session** surface (plus small native browser demos)
+4. Optional **remote host mode** — Minecraft runs on your Linux/Windows PC; the browser is the client
+5. **Mobile Minecraft HUD** + customizable on-screen controller (Minecraft only)
+6. Writes a **playable session / pack slice** into the browser (Cache Storage + IndexedDB)
 
 ## What this is (and is not)
 
@@ -32,6 +33,21 @@ npm run dev
 
 - Steam demo: [http://localhost:3000](http://localhost:3000) → **Try demo library** (or Connect Steam)
 - Minecraft: [http://localhost:3000/minecraft](http://localhost:3000/minecraft)
+
+### Remote host (your PC runs Minecraft)
+
+```bash
+node host-agent/demo-agent.mjs
+```
+
+In **Minecraft studio → Remote host**, enable it and set endpoint to
+`http://127.0.0.1:8787`. See `host-agent/README.md`.
+
+### Mobile controls
+
+On `/minecraft`, enable **Force on-screen controller** (or open on a phone).
+In-play, use **Edit controls** to drag buttons and tap to rebind keys. Layout
+is saved in the browser.
 
 ## Environment
 
