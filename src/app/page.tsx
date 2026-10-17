@@ -26,13 +26,50 @@ export default function HomePage() {
               <a href="/api/auth/steam" className="btn-signal">
                 Connect Steam
               </a>
-              <a href="/api/auth/steam?demo=1" className="btn-ghost">
-                Try demo library
-              </a>
+              <Link href="/minecraft" className="btn-ghost">
+                Minecraft + mods
+              </Link>
             </div>
           </section>
         </div>
       </div>
+
+      <section className="border-t border-line px-5 py-16 md:px-10 md:py-24">
+        <div className="mx-auto grid max-w-5xl gap-10 md:grid-cols-[1.1fr_0.9fr] md:gap-16">
+          <div>
+            <h2
+              className="text-3xl font-bold tracking-tight md:text-4xl"
+              style={{ fontFamily: "var(--font-display), sans-serif" }}
+            >
+              Minecraft, your version, your mods.
+            </h2>
+            <p className="mt-4 max-w-md text-fog leading-relaxed">
+              Pick a Java release and loader, then pull mods straight from
+              CurseForge. The pack manifest and session slice land in browser
+              cache; the full client stays on an ownership-checked play node.
+            </p>
+            <div className="mt-6">
+              <Link href="/minecraft" className="btn-signal">
+                Open Minecraft studio
+              </Link>
+            </div>
+          </div>
+          <ol className="space-y-5 font-mono text-sm text-paper/90">
+            <li className="border-l-2 border-signal pl-4">
+              <span className="text-signal">01</span> Choose version + Forge / Fabric / NeoForge
+            </li>
+            <li className="border-l-2 border-signal/60 pl-4">
+              <span className="text-signal">02</span> Search and add CurseForge mods
+            </li>
+            <li className="border-l-2 border-signal/40 pl-4">
+              <span className="text-signal">03</span> Cache the pack slice locally
+            </li>
+            <li className="border-l-2 border-signal/25 pl-4">
+              <span className="text-signal">04</span> Enter the session in your browser
+            </li>
+          </ol>
+        </div>
+      </section>
 
       <section className="border-t border-line px-5 py-16 md:px-10 md:py-24">
         <div className="mx-auto grid max-w-5xl gap-10 md:grid-cols-[1.1fr_0.9fr] md:gap-16">
@@ -76,15 +113,19 @@ export default function HomePage() {
             Built for Vercel.
           </h2>
           <p className="mt-4 max-w-xl text-fog leading-relaxed">
-            The web app, Steam auth callbacks, and library APIs deploy as a
+            The web app, Steam auth, CurseForge search, and library APIs deploy as a
             standard Next.js project. Point{" "}
-            <code className="font-mono text-signal">STEAM_API_KEY</code> and{" "}
+            <code className="font-mono text-signal">STEAM_API_KEY</code>,{" "}
+            <code className="font-mono text-signal">CURSEFORGE_API_KEY</code>, and{" "}
             <code className="font-mono text-signal">SESSION_SECRET</code> at your
             project, set the site URL, and ship.
           </p>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/minecraft" className="btn-signal">
+              Minecraft studio
+            </Link>
             <Link href="/library" className="btn-ghost">
-              Go to library
+              Steam library
             </Link>
           </div>
         </div>

@@ -39,10 +39,13 @@ export function SiteHeader() {
         >
           Playcache
         </span>
-        <span className="hidden text-xs text-fog sm:inline">steam · browser</span>
+        <span className="hidden text-xs text-fog sm:inline">steam · minecraft · browser</span>
       </Link>
 
       <nav className="flex items-center gap-2 md:gap-3">
+        <Link href="/minecraft" className="btn-ghost !py-2 !px-3 text-sm">
+          Minecraft
+        </Link>
         {session?.authenticated ? (
           <>
             <Link href="/library" className="btn-ghost !py-2 !px-3 text-sm">

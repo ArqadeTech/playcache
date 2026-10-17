@@ -1,25 +1,26 @@
 # Playcache
 
-Own it on Steam. Play the session in your browser.
+Own it on Steam. Play the session in your browser.  
+Also: **Minecraft + CurseForge mods** — pick a version, build a pack, cache it locally.
 
 Playcache is a Vercel-deployable Next.js app that:
 
-1. Signs players in with **Steam OpenID**
-2. Loads their **owned games** via the Steam Web API
-3. Writes a **playable session slice** into the browser (Cache Storage + IndexedDB)
-4. Starts a **stream session** for AAA titles (or a native browser demo game)
+1. Signs players in with **Steam OpenID** (for the Steam library)
+2. Loads **owned Steam games** via the Steam Web API
+3. Lets you build a **Minecraft modpack** (version + Forge/Fabric/NeoForge/Quilt + CurseForge mods)
+4. Writes a **playable session / pack slice** into the browser (Cache Storage + IndexedDB)
+5. Starts a **stream / session** surface (plus small native browser demos)
 
 ## What this is (and is not)
 
-Browsers cannot run native DirectX AAA installs (GTA V, etc.) from cache alone. Legitimate browser play uses:
+Browsers cannot run native DirectX AAA installs or redistribute Minecraft Java jars from cache alone. Legitimate browser play uses:
 
-- **Steam ownership checks** so only games you own can start
-- **A bounded browser cache** for codecs, shaders, input maps, and stream buffers
-- **A secured play node** that runs the real game and streams video + accepts input
+- **Ownership checks** (Steam for PC titles; Mojang/Microsoft account for Java in production)
+- **CurseForge** for legal mod metadata / discovery (API key optional; demo catalog included)
+- **A bounded browser cache** for pack manifests, codecs, shaders, and session buffers
+- **A secured play node** that runs the real game/client and streams video + accepts input
 
-This repo ships the web product, auth, library, and cache UX. The GPU stream farm is represented by a live session stage you can swap for WebRTC later. Includes **Orbit Drift**, a small native game that fully plays after caching.
-
-No cracked or pirated game files are used or required.
+No cracked clients, pirated jars, or unauthorized Minecraft redistributions.
 
 ## Quick start
 
@@ -29,22 +30,28 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) and use **Try demo library**.
+- Steam demo: [http://localhost:3000](http://localhost:3000) → **Try demo library** (or Connect Steam)
+- Minecraft: [http://localhost:3000/minecraft](http://localhost:3000/minecraft)
 
-## Steam (production)
+## Environment
 
-1. Create a Steam Web API key: https://steamcommunity.com/dev/apikey  
-2. Copy `.env.example` → `.env.local` and fill:
+Copy `.env.example` → `.env.local`:
 
 ```env
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-STEAM_API_KEY=your_key
+STEAM_API_KEY=
+CURSEFORGE_API_KEY=
 SESSION_SECRET=long-random-string
 ```
 
-3. Restart `npm run dev`, then use **Connect Steam**.
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL (Steam OpenID return_to) |
+| `STEAM_API_KEY` | Live Steam library; omit for demo library |
+| `CURSEFORGE_API_KEY` | Live CurseForge search; omit for demo mods |
+| `SESSION_SECRET` | Signs session cookies |
 
-For Vercel, set the same env vars and point `NEXT_PUBLIC_SITE_URL` at your deployment URL (e.g. `https://playcache.vercel.app`).
+CurseForge keys: [console.curseforge.com](https://console.curseforge.com/)
 
 ## Deploy to Vercel
 
@@ -53,20 +60,21 @@ npm i -g vercel
 vercel
 ```
 
-Or import the `playcache` folder in the Vercel dashboard. Framework preset: **Next.js**.
+Or import the `playcache` folder in the Vercel dashboard. Framework preset: **Next.js**. Set the env vars above on the project.
 
 ## Scripts
 
-| Command        | Description              |
-| -------------- | ------------------------ |
-| `npm run dev`  | Local development server |
-| `npm run build`| Production build         |
-| `npm run start`| Serve production build   |
-| `npm run lint` | ESLint                   |
+| Command         | Description              |
+| --------------- | ------------------------ |
+| `npm run dev`   | Local development server |
+| `npm run build` | Production build         |
+| `npm run start` | Serve production build   |
+| `npm run lint`  | ESLint                   |
 
 ## Stack
 
 - Next.js App Router
 - Steam OpenID + Web API
-- Browser Cache Storage / IndexedDB for session slices
+- CurseForge Mods API (`gameId=432`)
+- Browser Cache Storage / IndexedDB for session + modpack slices
 - Tailwind CSS v4

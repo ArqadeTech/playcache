@@ -21,9 +21,9 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Playcache — Own it on Steam. Play it in the browser.",
+  title: "Playcache — Steam games & Minecraft mods in the browser",
   description:
-    "Connect Steam, verify ownership, cache a playable session slice in your browser, and play with a strong connection. No cracked installs.",
+    "Connect Steam or build a Minecraft + CurseForge pack, cache a playable session slice in your browser, and play with a strong connection. No cracked installs.",
 };
 
 export default function RootLayout({

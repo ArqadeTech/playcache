@@ -29,6 +29,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "shared.cloudflare.steamstatic.com",
       },
+      {
+        protocol: "https",
+        hostname: "media.forgecdn.net",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.modrinth.com",
+      },
     ],
   },
 };
